@@ -99,15 +99,17 @@ def get_response(params):
             images = process_images(images, image_processor, model.config)
 
             if type(images) is list:
-                images = [image.to(model.device, dtype=torch.float16)
+                images = [image.to(model.device, dtype=torch.float32)
                           for image in images]
             else:
-                images = images.to(model.device, dtype=torch.float16)
+                images = images.to(model.device, dtype=torch.float32)
 
             replace_token = DEFAULT_IMAGE_TOKEN
             if getattr(model.config, 'mm_use_im_start_end', False):
                 replace_token = DEFAULT_IM_START_TOKEN + replace_token + DEFAULT_IM_END_TOKEN
             prompt = prompt.replace(DEFAULT_IMAGE_TOKEN, replace_token)
+            print(model.get_vision_tower())
+            print(model.get_vision_tower().num_patches)
 
             num_image_tokens = prompt.count(
                 replace_token) * model.get_vision_tower().num_patches
@@ -128,11 +130,12 @@ def get_response(params):
 
     input_ids = tokenizer_image_token(
         prompt, tokenizer, IMAGE_TOKEN_INDEX, return_tensors='pt').unsqueeze(0).to(model.device)
+    print(prompt)
     keywords = [stop_str]
     stopping_criteria = KeywordsStoppingCriteria(
         keywords, tokenizer, input_ids)
     streamer = TextIteratorStreamer(
-        tokenizer, skip_prompt=True, skip_special_tokens=True, timeout=15)
+        tokenizer, skip_prompt=True, skip_special_tokens=True, timeout=150)
 
     max_new_tokens = min(max_new_tokens, max_context_length -
                          input_ids.shape[-1] - num_image_tokens)
@@ -215,7 +218,7 @@ def http_bot(state, temperature, top_p, max_new_tokens):
         "temperature": float(temperature),
         "top_p": float(top_p),
         "max_new_tokens": min(int(max_new_tokens), 1536),
-        "stop": state.sep if state.sep_style in [SeparatorStyle.SINGLE, SeparatorStyle.MPT] else state.sep2,
+        "stop": state.sep if state.sep_style in [SeparatorStyle.SINGLE] else state.sep2,  # , SeparatorStyle.MPT
         "images": f'List of {len(state.get_images())} images: {all_image_hash}',
     }
 
@@ -269,9 +272,9 @@ def build_demo():
 
                 cur_dir = os.path.dirname(os.path.abspath(__file__))
                 gr.Examples(examples=[
-                    [f"{cur_dir}/examples/breaking_bad.png",
+                    [f"{cur_dir}/../examples/breaking_bad.png",
                         "What is the most common catchphrase of the character on the right?"],
-                    [f"{cur_dir}/examples/photo.png",
+                    [f"{cur_dir}/../examples/photo.png",
                         "From a photography perspective, analyze what makes this picture beautiful?"],
                 ], inputs=[imagebox, textbox])
 

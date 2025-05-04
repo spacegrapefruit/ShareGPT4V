@@ -27,9 +27,12 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
             bnb_4bit_quant_type='nf4'
         )
     else:
-        kwargs['torch_dtype'] = torch.float16
+        kwargs['torch_dtype'] = torch.float32
 
-    if 'sharegpt4v' in model_name.lower():
+    print(model_name)
+    print(kwargs)
+    print("\n\n\n")
+    if 'share4v' in model_name.lower():
         # Load ShareGPT4V model
         if 'lora' in model_name.lower() and model_base is None:
             warnings.warn('There is `lora` in model name but no `model_base` is provided. If you are loading a LoRA model, please provide the `model_base` argument.')
@@ -118,7 +121,7 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
 
     image_processor = None
 
-    if 'sharegpt4v' in model_name.lower():
+    if 'share4v' in model_name.lower():
         mm_use_im_start_end = getattr(
             model.config, "mm_use_im_start_end", False)
         mm_use_im_patch_token = getattr(
@@ -134,7 +137,7 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
         vision_tower = model.get_vision_tower()
         if not vision_tower.is_loaded:
             vision_tower.load_model()
-        vision_tower.to(device=device, dtype=torch.float16)
+        # vision_tower.to(device=device, dtype=torch.float16)
         image_processor = vision_tower.image_processor
 
     if hasattr(model.config, "max_sequence_length"):

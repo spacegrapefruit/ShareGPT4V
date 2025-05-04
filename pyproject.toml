@@ -1,35 +1,60 @@
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
-
-[project]
+[tool.poetry]
 name = "share4v"
 version = "1.0.0"
 description = "Towards GPT-4 like large language and visual assistant."
 readme = "README.md"
-requires-python = ">=3.8"
+authors = []  # Add author(s) here, e.g., ["Your Name <you@example.com>"]
+license = "Apache-2.0"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: Apache Software License"
 ]
-dependencies = [
-    "torch==2.0.1", "torchvision==0.15.2",
-    "transformers==4.31.0", "tokenizers>=0.12.1,<0.14", "sentencepiece==0.1.99", "shortuuid",
-    "accelerate==0.21.0", "peft==0.4.0", "bitsandbytes==0.41.0", "xformers==0.0.21",
-    "markdown2[all]", "numpy", "scikit-learn==1.2.2", "urllib3==1.26.0",
-    "gradio==4.5.0", "requests", "httpx==0.24.0", "uvicorn", "fastapi","ftfy",
-    "einops==0.6.1", "einops-exts==0.0.4", "timm==0.6.13", "prettytable", "openpyxl"
-]
+homepage = "https://sharegpt4v.github.io/"
+repository = "https://github.com/InternLM/InternLM-XComposer"
 
-[project.optional-dependencies]
-train = ["deepspeed", "ninja", "wandb", "tensorboardX"]
-
-[project.urls]
-"Homepage" = "https://sharegpt4v.github.io/"
+[tool.poetry.urls]
 "Bug Tracker" = "https://github.com/InternLM/InternLM-XComposer/issues"
 
-[tool.setuptools.packages.find]
-exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*"]
+[tool.poetry.dependencies]
+python = ">=3.10, <3.13"
+torch = {version = "^2.0.1+cpu", source = "pytorch_cpu"}
+torchvision = {version = "^0.15.2+cpu", source = "pytorch_cpu"}
+transformers = "4.31.0"
+tokenizers = ">=0.12.1,<0.14"
+sentencepiece = "0.1.99"
+shortuuid = "*"
+accelerate = "0.21.0"
+peft = "0.4.0"
+bitsandbytes = "0.41.0"
+xformers = "0.0.21"
+markdown2 = { version = "*", extras = ["all"] }
+numpy = "1.*"
+scikit-learn = "1.2.2"
+urllib3 = "1.*"
+gradio = "4.*"
+requests = "*"
+httpx = "0.24.0"
+uvicorn = "*"
+fastapi = "0.112.4"
+ftfy = "*"
+einops = "0.6.1"
+einops-exts = "0.0.4"
+timm = "0.6.13"
+prettytable = "*"
+openpyxl = "*"
 
-[tool.wheel]
-exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*"]
+# Optional dependencies for training.
+deepspeed = { version = "*", optional = true }
+ninja = { version = "*", optional = true }
+ipykernel = "^6.29.5"
+torchsummary = "^1.5.1"
+torchviz = "^0.0.3"
+
+[[tool.poetry.source]]
+name = "pytorch_cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
