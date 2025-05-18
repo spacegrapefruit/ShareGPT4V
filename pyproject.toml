@@ -49,6 +49,7 @@ ninja = { version = "*", optional = true }
 ipykernel = "^6.29.5"
 torchsummary = "^1.5.1"
 torchviz = "^0.0.3"
+english-words = "^2.0.1"
 
 [[tool.poetry.source]]
 name = "pytorch_cpu"
