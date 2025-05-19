@@ -827,12 +827,35 @@ def unlock_vit(training_args, model_args, vision_tower):
             p.requires_grad = True
 
 
+def print_trainable_parameters(model):
+    """
+    Prints the number of trainable parameters in a PyTorch model.
+    """
+    trainable_params = 0
+    all_param = 0
+    for name, param in model.named_parameters():
+        numel = param.numel()  # numel() returns the total number of elements in the tensor
+        all_param += numel
+        if param.requires_grad:
+            trainable_params += numel
+            # print(name, numel)
+    
+    frozen_params = all_param - trainable_params
+    print(
+        f"Total parameters: {all_param:,}\n"
+        f"Trainable parameters: {trainable_params:,}\n"
+        f"Frozen parameters: {frozen_params:,}\n"
+        f"Trainable%: {100 * trainable_params / all_param:.2f}%"
+    )
+
+
 def train():
     global local_rank
 
     parser = transformers.HfArgumentParser(
         (ModelArguments, DataArguments, TrainingArguments))
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
+    # print(training_args)
     local_rank = training_args.local_rank
     compute_dtype = (torch.float16 if training_args.fp16 else (
         torch.bfloat16 if training_args.bf16 else torch.float32))
@@ -849,6 +872,7 @@ def train():
                 load_in_8bit=training_args.bits == 8,
                 llm_int8_threshold=6.0,
                 llm_int8_has_fp16_weight=False,
+                # llm_int8_skip_modules=["mm_projector"],
                 bnb_4bit_compute_dtype=compute_dtype,
                 bnb_4bit_use_double_quant=training_args.double_quant,
                 bnb_4bit_quant_type=training_args.quant_type  # {'fp4', 'nf4'}
@@ -1002,6 +1026,7 @@ def train():
                     if training_args.bf16 and module.weight.dtype == torch.float32:
                         module = module.to(torch.bfloat16)
 
+    print_trainable_parameters(model)
     data_module = make_supervised_data_module(tokenizer=tokenizer,
                                               data_args=data_args)
     trainer = Share4VTrainer(model=model,

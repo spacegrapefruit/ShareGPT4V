@@ -99,17 +99,15 @@ def get_response(params):
             images = process_images(images, image_processor, model.config)
 
             if type(images) is list:
-                images = [image.to(model.device, dtype=torch.float32)
+                images = [image.to(model.device, dtype=torch.float16)
                           for image in images]
             else:
-                images = images.to(model.device, dtype=torch.float32)
+                images = images.to(model.device, dtype=torch.float16)
 
             replace_token = DEFAULT_IMAGE_TOKEN
             if getattr(model.config, 'mm_use_im_start_end', False):
                 replace_token = DEFAULT_IM_START_TOKEN + replace_token + DEFAULT_IM_END_TOKEN
             prompt = prompt.replace(DEFAULT_IMAGE_TOKEN, replace_token)
-            print(model.get_vision_tower())
-            print(model.get_vision_tower().num_patches)
 
             num_image_tokens = prompt.count(
                 replace_token) * model.get_vision_tower().num_patches
@@ -130,12 +128,11 @@ def get_response(params):
 
     input_ids = tokenizer_image_token(
         prompt, tokenizer, IMAGE_TOKEN_INDEX, return_tensors='pt').unsqueeze(0).to(model.device)
-    print(prompt)
     keywords = [stop_str]
     stopping_criteria = KeywordsStoppingCriteria(
         keywords, tokenizer, input_ids)
     streamer = TextIteratorStreamer(
-        tokenizer, skip_prompt=True, skip_special_tokens=True, timeout=150)
+        tokenizer, skip_prompt=True, skip_special_tokens=True, timeout=15)
 
     max_new_tokens = min(max_new_tokens, max_context_length -
                          input_ids.shape[-1] - num_image_tokens)

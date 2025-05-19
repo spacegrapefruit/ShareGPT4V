@@ -17,16 +17,16 @@ repository = "https://github.com/InternLM/InternLM-XComposer"
 
 [tool.poetry.dependencies]
 python = ">=3.10, <3.13"
-torch = {version = "^2.0.1+cpu", source = "pytorch_cpu"}
-torchvision = {version = "^0.15.2+cpu", source = "pytorch_cpu"}
+torch = "2.4.*"
+torchvision = "0.19.*"
 transformers = "4.31.0"
 tokenizers = ">=0.12.1,<0.14"
 sentencepiece = "0.1.99"
 shortuuid = "*"
 accelerate = "0.21.0"
 peft = "0.4.0"
-bitsandbytes = "0.41.0"
-xformers = "0.0.21"
+bitsandbytes = "0.43.3"
+# xformers = "0.0.21"
 markdown2 = { version = "*", extras = ["all"] }
 numpy = "1.*"
 scikit-learn = "1.2.2"
@@ -50,11 +50,6 @@ ipykernel = "^6.29.5"
 torchsummary = "^1.5.1"
 torchviz = "^0.0.3"
 english-words = "^2.0.1"
-
-[[tool.poetry.source]]
-name = "pytorch_cpu"
-url = "https://download.pytorch.org/whl/cpu"
-priority = "explicit"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
