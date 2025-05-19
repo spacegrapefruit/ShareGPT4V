@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What's happening in this image?\n<image>"
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows Walter White and Jesse Pinkman from the TV series Breaking Bad. They appear to be in their mobile meth lab, wearing protective yellow hazmat suits, which is an iconic scene from the show. The two characters are likely engaged in cooking methamphetamine, which is the central activity depicted throughout the series."
+      }
+    ],
+    "image": "images/breaking_bad.png"
+  },
+  {
+    "id": "2",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Tell me a joke about this image\n<image>"
+      },
+      {
+        "from": "gpt",
+        "value": "Why did Walter White and Jesse Pinkman bring a ladder to their meth lab? Because they heard the job had great 'highs'!"
+      }
+    ],
+    "image": "images/breaking_bad.png"
+  }
+]
