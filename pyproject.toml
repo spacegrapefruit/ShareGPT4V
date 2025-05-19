@@ -44,7 +44,7 @@ prettytable = "*"
 openpyxl = "*"
 
 # Optional dependencies for training.
-deepspeed = { version = "*", optional = true }
+deepspeed = "*"
 ninja = { version = "*", optional = true }
 ipykernel = "^6.29.5"
 torchsummary = "^1.5.1"
