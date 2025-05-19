@@ -63,10 +63,11 @@ class Share4VMetaModel:
 
         if getattr(self, 'mm_projector', None) is None:
             self.mm_projector = build_vision_projector(self.config)
-        # else:
-        #     # In case it is frozen by LoRA
-        #     for p in self.mm_projector.parameters():
-        #         p.requires_grad = True
+        else:
+            # In case it is frozen by LoRA
+            for p in self.mm_projector.parameters():
+                pass
+                # p.requires_grad = True
 
         if pretrain_mm_mlp_adapter is not None:
             print(f'Load mm_mlp_adapter from {pretrain_mm_mlp_adapter}')
