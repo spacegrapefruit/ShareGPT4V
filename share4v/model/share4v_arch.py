@@ -67,6 +67,7 @@ class Share4VMetaModel:
             # In case it is frozen by LoRA
             for p in self.mm_projector.parameters():
                 pass
+                # TODO Aleksandr: this it supposed to work, but doesn't
                 # p.requires_grad = True
 
         if pretrain_mm_mlp_adapter is not None:
