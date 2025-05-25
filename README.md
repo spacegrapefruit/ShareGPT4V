@@ -31,6 +31,15 @@ Below is an example (from Appendix C, Figure 11 of our report) showing the input
 * This work demonstrates an efficient method for adapting large multimodal models for cross-lingual tasks, especially for restoring capabilities in low-resource languages without requiring full model retraining or extensive computational resources.
 * Our findings suggest LoRA can be a lightweight mechanism to reintroduce or layer functionalities onto specialized models that may have lost general capabilities during intensive fine-tuning.
 
-This repository is a fork of the official [ShareGPT4V repository](https://github.com/ShareGPT4Omni/ShareGPT4V). Our implementation and adaptations for Lithuanian language generation are detailed within.
+This repository is a fork of the official [ShareGPT4V repository](https://github.com/ShareGPT4Omni/ShareGPT4V). Our implementation and adaptations for the project are mostly contained in the 'notebooks' folder. Here is a short summary of the notebooks:
+
+The notebooks in this repository serve the following purposes:
+
+- **prepare_trainset.ipynb**: Prepares and translates a subset of the training dataset.
+- **train_lora.ipynb**: Contains scripts and commands for training the LoRA with quantization.
+- **visuals.ipynb**: Generates visualizations and analysis for the report.
+- **lora_dissect.ipynb**: Used to understand and analyze LoRA.
+- **predict_model.ipynb**: Used to understand the structure of the base ShareGPT4V-7B model.
+- **predict_lora_model.ipynb**: Similar to 'predict_model' but uses our finetuned model.
 
 For a comprehensive understanding of the methodology, data, and more examples, please refer to our full report (`[TODO]`).
