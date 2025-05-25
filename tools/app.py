@@ -189,7 +189,7 @@ def http_bot(state, temperature, top_p, max_new_tokens):
                 elif 'plain' in model_name.lower() and 'finetune' not in model_name.lower():
                     template_name = "v0_mmtag"
                 else:
-                    template_name = "llava_v0"
+                    template_name = "vicuna_v1"
         elif "mpt" in model_name:
             template_name = "mpt_text"
         elif "llama-2" in model_name:
@@ -269,8 +269,8 @@ def build_demo():
 
                 cur_dir = os.path.dirname(os.path.abspath(__file__))
                 gr.Examples(examples=[
-                    [f"{cur_dir}/../examples/breaking_bad.png",
-                        "What is the most common catchphrase of the character on the right?"],
+                    [f"{cur_dir}/../examples/vyt.jpg",
+                        "Craft a coherent paragraph of formal analysis about 200 words, directing its attention solely toward the visual qualities without exploring other domains."],
                     [f"{cur_dir}/../examples/photo.png",
                         "From a photography perspective, analyze what makes this picture beautiful?"],
                 ], inputs=[imagebox, textbox])
@@ -354,19 +354,32 @@ def parse_args():
     parser.add_argument("--host", type=str, default="0.0.0.0")
     parser.add_argument("--port", type=int, default=7860)
     parser.add_argument("--share", default=True)
-    parser.add_argument("--model-path", type=str,
-                        default="Lin-Chen/ShareGPT4V-7B")
-    parser.add_argument("--model-name", type=str,
-                        default="share4v-7b")
+    parser.add_argument("--load-lora-model", action="store_true")
     args = parser.parse_args()
     return args
 
 
 if __name__ == '__main__':
     args = parse_args()
-    model_name = args.model_name
+
+    # Model configuration parameters
+    if args.load_lora_model:
+        model_base = "Lin-Chen/ShareGPT4V-7B"
+        model_name = model_path = "notebooks/checkpoints/llava-share4v-lora/"
+    else:
+        model_path = "Lin-Chen/ShareGPT4V-7B"
+        model_base = None
+        model_name = "share4v-7b"
+
+    # Load the pretrained model and its components
     tokenizer, model, image_processor, context_len = load_pretrained_model(
-        args.model_path, None, args.model_name, False, False)
+        model_path,
+        model_base,
+        model_name,
+        False,
+        False,
+    )
+
     demo = build_demo()
     demo.queue()
     demo.launch(server_name=args.host,
