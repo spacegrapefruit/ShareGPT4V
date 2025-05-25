@@ -32,9 +32,6 @@ Below is an example (from Appendix C, Figure 11 of our report) showing the input
 * Our findings suggest LoRA can be a lightweight mechanism to reintroduce or layer functionalities onto specialized models that may have lost general capabilities during intensive fine-tuning.
 
 This repository is a fork of the official [ShareGPT4V repository](https://github.com/ShareGPT4Omni/ShareGPT4V). Our implementation and adaptations for the project are mostly contained in the 'notebooks' folder. Here is a short summary of the notebooks:
-
-The notebooks in this repository serve the following purposes:
-
 - **prepare_trainset.ipynb**: Prepares and translates a subset of the training dataset.
 - **train_lora.ipynb**: Contains scripts and commands for training the LoRA with quantization.
 - **visuals.ipynb**: Generates visualizations and analysis for the report.
